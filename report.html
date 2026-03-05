@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 24px;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin-left: 20px;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        main {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .charts-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .chart-wrapper {
+            flex: 1 1 45%; /* Each chart takes up around 45% of the container */
+            max-width: 45%;
+            margin: 20px;
+        }
+
+        .chart-wrapper canvas {
+            width: 100%;
+            height: auto;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer-container .contact, .footer-container .resources {
+            margin-left: 20px;
+        }
+
+        .footer-container h4 {
+            margin-bottom: 10px;
+        }
+
+        .footer-container p, .footer-container a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="navbar">
+        <h2>EduMailer</h2>
+        <nav>
+            <ul>
+                <li><a href="/upload">Upload Attendance Data</a></li>
+                <li><a href="/display_data">Data</a></li>
+                <li><a href="/email">Emails</a></li>
+                <li><a href="/report">Reports</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<h1>Attendance Report</h1>
+
+<!-- Charts Section -->
+<div class="charts-container">
+    <div class="chart-wrapper">
+        <canvas id="attendanceChart"></canvas>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="timeSpentChart"></canvas>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="lateEntriesChart"></canvas>
+    </div>
+</div>
+
+<!-- Attendance Table -->
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Time Spent (hours)</th>
+            <th>Late Entries</th>
+            <th>Early Exits</th>
+            <th>Attendance Status</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in attendance_records %}
+        <tr>
+            <td>{{ record.name }}</td>
+            <td>{{ record.course }}</td>
+            <td>{{ record.time_spent }}</td>
+            <td>{{ record.late_entries }}</td>
+            <td>{{ record.early_exits }}</td>
+            <td>{{ record.attendance_status }}</td>
+            <td>{{ record.email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Charts JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Data passed from Django
+        const labels = {{ labels|safe }};
+        const attendanceStatusData = {{ attendance_data|safe }};
+        const timeSpentData = {{ time_spent_data|safe }};
+        const lateEntriesData = {{ late_entries_data|safe }};
+
+        // Chart 1: Attendance Status (Pie Chart)
+        new Chart(document.getElementById('attendanceChart'), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Attendance Status',
+                    data: attendanceStatusData,
+                    backgroundColor: ['#4CAF50', '#FF5252', '#FF5252'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Time Spent (Bar Chart)
+        new Chart(document.getElementById('timeSpentChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Time Spent (hours)',
+                    data: timeSpentData,
+                    backgroundColor: '#42A5F5',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Late Entries (Bar Chart)
+        new Chart(document.getElementById('lateEntriesChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Late Entries',
+                    data: lateEntriesData,
+                    backgroundColor: '#FFA726',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

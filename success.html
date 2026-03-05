@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Success</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 24px;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin-left: 20px;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        main {
+            padding: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 28px;
+            color: #28a745;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer-container .contact, .footer-container .resources {
+            margin-left: 20px;
+        }
+
+        .footer-container h4 {
+            margin-bottom: 10px;
+        }
+
+        .footer-container p, .footer-container a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h2>EduMailer</h2>
+            <nav>
+                <ul>
+                    <li><a href="/upload">Upload Attendance data</a></li>
+                    <li><a href="/display_data">Data</a></li>
+                    <li><a href="/email">Emails</a></li>
+                    <li><a href="/report">Reports</a></li>
+                </ul>
+            </nav>
+<!--            <a href="#" class="login-btn">Login</a>-->
+        </div>
+    </header>
+
+    <main>
+        <h1>Attendance uploaded  Successfully</h1>
+        <p>The action was completed successfully!</p>
+    </main>
+
+
+</body>
+</html>
